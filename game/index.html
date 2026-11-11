@@ -66,38 +66,47 @@ $('form').onsubmit=e=>{
 $('clear').onclick=()=>{tasks=tasks.filter(t=>!t.done);save();render()};
 let drag=null;
 function startDrag(e,li,handle){
-  if(e.button!==0||drag)return;
+  if((e.pointerType==='mouse'&&e.button!==0)||drag)return;
   e.preventDefault();
-  drag={li,handle,pointerId:e.pointerId};
+  drag={li,handle,pointerId:e.pointerId,targetId:li.dataset.id,before:true};
   li.classList.add('dragging');
-  handle.setPointerCapture(e.pointerId);
-  handle.addEventListener('pointermove',moveDrag);
-  handle.addEventListener('pointerup',endDrag);
-  handle.addEventListener('pointercancel',endDrag);
+  document.addEventListener('pointermove',moveDrag,{passive:false});
+  document.addEventListener('pointerup',endDrag);
+  document.addEventListener('pointercancel',cancelDrag);
 }
 function moveDrag(e){
   if(!drag||e.pointerId!==drag.pointerId)return;
+  e.preventDefault();
   const list=$('items');
-  const target=document.elementFromPoint(e.clientX,e.clientY)?.closest('li');
-  if(target&&target!==drag.li&&target.parentElement===list){
-    const middle=target.getBoundingClientRect().top+target.offsetHeight/2;
-    list.insertBefore(drag.li,e.clientY<middle?target:target.nextSibling);
-  }
-  if(e.clientY<60)window.scrollBy(0,-12);
-  if(e.clientY>window.innerHeight-60)window.scrollBy(0,12);
+  const rows=[...list.children];
+  const target=rows.find(row=>e.clientY<row.getBoundingClientRect().bottom)||rows[rows.length-1];
+  if(!target)return;
+  rows.forEach(row=>row.classList.remove('drag-target'));
+  target.classList.add('drag-target');
+  drag.targetId=target.dataset.id;
+  drag.before=e.clientY<target.getBoundingClientRect().top+target.getBoundingClientRect().height/2;
+  if(e.clientY<70)window.scrollBy(0,-10);
+  if(e.clientY>window.innerHeight-70)window.scrollBy(0,10);
 }
+function cleanupDrag(){
+  document.removeEventListener('pointermove',moveDrag);
+  document.removeEventListener('pointerup',endDrag);
+  document.removeEventListener('pointercancel',cancelDrag);
+  $('items').querySelectorAll('.drag-target,.dragging').forEach(el=>el.classList.remove('drag-target','dragging'));
+}
+function cancelDrag(e){if(!drag||e.pointerId!==drag.pointerId)return;cleanupDrag();drag=null}
 function endDrag(e){
   if(!drag||e.pointerId!==drag.pointerId)return;
-  const {li,handle}=drag;
-  handle.removeEventListener('pointermove',moveDrag);
-  handle.removeEventListener('pointerup',endDrag);
-  handle.removeEventListener('pointercancel',endDrag);
-  li.classList.remove('dragging');
-  drag=null;
-  const ids=[...$('items').children].map(el=>el.dataset.id);
-  const byId=new Map(tasks.map(t=>[t.id,t]));
-  tasks=ids.map(id=>byId.get(id)).filter(Boolean);
-  save();
+  const {li,targetId,before}=drag;
+  cleanupDrag();drag=null;
+  if(targetId===li.dataset.id)return;
+  const from=tasks.findIndex(t=>t.id===li.dataset.id);
+  if(from<0)return;
+  const [moved]=tasks.splice(from,1);
+  const targetIndex=tasks.findIndex(t=>t.id===targetId);
+  if(targetIndex<0){tasks.splice(from,0,moved);return}
+  tasks.splice(targetIndex+(before?0:1),0,moved);
+  save();render();
 }
 render();
 </script></body></html>
