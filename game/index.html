@@ -25,7 +25,7 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify(tasks))}catch(e){ale
 function render(){
   $('items').replaceChildren();
   $('empty').hidden=tasks.length!==0;
-  tasks.forEach(t=>{
+  [...tasks].reverse().forEach(t=>{
     const li=document.createElement('li');
     if(t.done)li.className='done';
     const check=document.createElement('button');
