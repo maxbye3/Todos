@@ -1,11 +1,12 @@
 <!doctype html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#1abc9c"><title>Todos — Flatlist</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f4f7f8;color:#34495e;font-family:Arial,"Helvetica Neue",sans-serif}header{background:#2c3e50;color:#fff;padding:22px 24px}header .inner{max-width:640px;margin:auto;font-size:22px;font-weight:800;display:flex;align-items:center;justify-content:space-between;gap:12px}header i{font-style:normal;color:#1abc9c}.see-all{background:#1abc9c;color:#fff;border-radius:7px;padding:11px 18px;font-size:15px;font-weight:700;opacity:1;cursor:default}.header-toggle{display:inline-block;background:#43586c;color:#fff;text-decoration:none;border:1px solid #6a7d8d;border-radius:7px;padding:11px 16px;font-size:15px;font-weight:700}.header-toggle:hover{background:#526b80}main{max-width:640px;margin:45px auto;padding:0 18px}.list-switch{display:flex;gap:5px;width:max-content;background:#e7edee;padding:5px;border-radius:9px;margin-bottom:29px}.list-switch a{padding:10px 19px;border-radius:6px;text-decoration:none;font-size:14px;font-weight:700;color:#7f8c8d}.list-switch a.current,.list-switch a.nav-action{background:#1abc9c;color:white}.eyebrow{font-size:12px;letter-spacing:2px;font-weight:800;color:#1abc9c}h1{font-size:44px;letter-spacing:-2px;margin:9px 0 10px}p{color:#95a5a6;margin:0}.panel{background:white;border-radius:12px;padding:24px;margin-top:30px;box-shadow:0 8px 30px #2c3e5010}.add{display:flex;gap:10px}input{min-width:0;flex:1;border:2px solid #e6eaed;border-radius:7px;padding:15px;font-size:16px;color:#34495e;outline:none}input:focus{border-color:#1abc9c}button{border:0;border-radius:7px;background:#1abc9c;color:white;font-size:15px;font-weight:bold;padding:12px 18px;cursor:pointer}button:hover{filter:brightness(.94)}.tabs{display:flex;gap:7px;margin:24px 0 8px;padding-bottom:16px;border-bottom:1px solid #edf0f2}.tabs button{background:#eef2f4;color:#7f8c8d}.tabs button.active{background:#1abc9c;color:white}ul{padding:0;margin:0;list-style:none}li{display:flex;gap:12px;align-items:center;padding:15px 0;border-bottom:1px solid #eef1f3}.task-wrap{flex:1;min-width:0}.completed-date{display:block;margin-top:5px;font-size:12px;color:#a5b0b7}.check{width:27px;height:27px;border:2px solid #cbd5d9;border-radius:50%;background:white;flex:none;padding:0}.done .check{background:#1abc9c;border-color:#1abc9c}.task{flex:1;overflow-wrap:anywhere;font-size:16px}.done .task{text-decoration:line-through;color:#aab5bb}.icon{background:transparent;color:#9baab2;padding:5px 7px;font-size:20px}.empty{text-align:center;padding:40px 10px;color:#95a5a6}.empty[hidden]{display:none}.progress{height:6px;background:#edf1f2;border-radius:8px;margin-top:20px;overflow:hidden}.bar{height:100%;width:0;background:#1abc9c;transition:width .2s}.footer{display:flex;align-items:center;justify-content:space-between;margin-top:15px;color:#95a5a6;font-size:13px}.clear{background:transparent;color:#95a5a6;padding:8px}.hint{text-align:center;margin-top:23px;color:#9eacb3;font-size:12px}@media(max-width:480px){main{margin:28px auto}h1{font-size:38px}.panel{padding:16px}.tabs button{flex:1;padding:11px 4px}.add button{padding:10px}}
+*{box-sizing:border-box}body{margin:0;background:#f4f7f8;color:#34495e;font-family:Arial,"Helvetica Neue",sans-serif}header{background:#2c3e50;color:#fff;padding:22px 24px}header .inner{max-width:640px;margin:auto;font-size:22px;font-weight:800;display:flex;align-items:center;justify-content:space-between;gap:12px}header i{font-style:normal;color:#1abc9c}.see-all{background:#1abc9c;color:#fff;border-radius:7px;padding:11px 18px;font-size:15px;font-weight:700;opacity:1;cursor:default}.header-toggle{display:inline-block;background:#43586c;color:#fff;text-decoration:none;border:1px solid #6a7d8d;border-radius:7px;padding:11px 16px;font-size:15px;font-weight:700}.header-toggle:hover{background:#526b80}main{max-width:640px;margin:45px auto;padding:0 18px}.list-switch{display:flex;gap:5px;width:max-content;background:#e7edee;padding:5px;border-radius:9px;margin-bottom:29px}.list-switch a{padding:10px 19px;border-radius:6px;text-decoration:none;font-size:14px;font-weight:700;color:#7f8c8d}.list-switch a.current,.list-switch a.nav-action{background:#1abc9c;color:white}.eyebrow{font-size:12px;letter-spacing:2px;font-weight:800;color:#1abc9c}h1{font-size:44px;letter-spacing:-2px;margin:9px 0 10px}p{color:#95a5a6;margin:0}.panel{background:white;border-radius:12px;padding:24px;margin-top:30px;box-shadow:0 8px 30px #2c3e5010}.add{display:flex;gap:10px}input{min-width:0;flex:1;border:2px solid #e6eaed;border-radius:7px;padding:15px;font-size:16px;color:#34495e;outline:none}input:focus{border-color:#1abc9c}button{border:0;border-radius:7px;background:#1abc9c;color:white;font-size:15px;font-weight:bold;padding:12px 18px;cursor:pointer}button:hover{filter:brightness(.94)}.tabs{display:flex;gap:7px;margin:24px 0 8px;padding-bottom:16px;border-bottom:1px solid #edf0f2}.tabs button{background:#eef2f4;color:#7f8c8d}.tabs button.active{background:#1abc9c;color:white}ul{padding:0;margin:0;list-style:none}li{display:flex;gap:9px;align-items:center;padding:15px 0;border-bottom:1px solid #eef1f3}li.dragging{opacity:.55;background:#e8faf5;border-radius:8px}li.drag-target{box-shadow:inset 0 3px #1abc9c}.drag-handle{background:transparent;color:#91a3ad;cursor:grab;touch-action:none;padding:9px 5px;font-size:22px;line-height:1;user-select:none}.drag-handle:active{cursor:grabbing}.task-wrap{flex:1;min-width:0}.completed-date{display:block;margin-top:5px;font-size:12px;color:#a5b0b7}.check{width:27px;height:27px;border:2px solid #cbd5d9;border-radius:50%;background:white;flex:none;padding:0}.done .check{background:#1abc9c;border-color:#1abc9c}.task{flex:1;overflow-wrap:anywhere;font-size:16px}.done .task{text-decoration:line-through;color:#aab5bb}.icon{background:transparent;color:#9baab2;padding:5px 7px;font-size:20px}.empty{text-align:center;padding:40px 10px;color:#95a5a6}.empty[hidden]{display:none}.progress{height:6px;background:#edf1f2;border-radius:8px;margin-top:20px;overflow:hidden}.bar{height:100%;width:0;background:#1abc9c;transition:width .2s}.footer{display:flex;align-items:center;justify-content:space-between;margin-top:15px;color:#95a5a6;font-size:13px}.clear{background:transparent;color:#95a5a6;padding:8px}.hint{text-align:center;margin-top:23px;color:#9eacb3;font-size:12px}@media(max-width:480px){main{margin:28px auto}h1{font-size:38px}.panel{padding:16px}.tabs button{flex:1;padding:11px 4px}.add button{padding:10px}}
 </style></head><body><header><div class="inner"><button type="button" class="see-all" disabled aria-label="See all, coming soon">See all</button><a class="header-toggle" href="./game/">Go to Game →</a></div></header><main><div class="eyebrow">Max's to-dos</div><h1>Today</h1><p>Shit to do</p><section class="panel"><form class="add" id="form"><input id="entry" placeholder="What needs doing?" maxlength="250" aria-label="New task" required autocomplete="off"><button type="submit">+ Add</button></form><ul id="items"></ul><div id="empty" class="empty">Nothing here yet. Add a task above.</div><div class="progress"><div class="bar" id="bar"></div></div><div class="footer"><span id="count">0 tasks left</span><button id="clear" class="clear" type="button">Clear completed</button></div></section><div class="hint">✓ Saved automatically in this browser</div></main>
 <script>
 const KEY='flatlist.tasks.v1';
 const MIGRATION_KEY=KEY+'.chronological.v1';
+const ORDER_MIGRATION_KEY=KEY+'.manual-order.v1';
 const SHOW_DATES=true;
 let tasks=[];
 try {
@@ -19,14 +20,20 @@ try {
     localStorage.setItem(KEY,JSON.stringify(tasks));
     localStorage.setItem(MIGRATION_KEY,'yes');
   }
+  if(localStorage.getItem(ORDER_MIGRATION_KEY)!=='yes'){
+    tasks.reverse();
+    localStorage.setItem(KEY,JSON.stringify(tasks));
+    localStorage.setItem(ORDER_MIGRATION_KEY,'yes');
+  }
 }catch(e){}
 const $=id=>document.getElementById(id);
 function save(){try{localStorage.setItem(KEY,JSON.stringify(tasks))}catch(e){alert('Could not save tasks. Check browser storage settings.')}}
 function render(){
   $('items').replaceChildren();
   $('empty').hidden=tasks.length!==0;
-  [...tasks].reverse().forEach(t=>{
-    const li=document.createElement('li');
+  tasks.forEach(t=>{
+    const li=document.createElement('li');li.dataset.id=t.id;
+    const handle=document.createElement('button');handle.type='button';handle.className='drag-handle';handle.textContent='⠿';handle.title='Drag to reorder';handle.setAttribute('aria-label','Drag to reorder '+t.text);handle.addEventListener('pointerdown',e=>startDrag(e,li,handle));handle.addEventListener('keydown',e=>{if(e.key==='ArrowUp'||e.key==='ArrowDown'){e.preventDefault();const at=tasks.findIndex(x=>x.id===t.id);const next=at+(e.key==='ArrowUp'?-1:1);if(next>=0&&next<tasks.length){[tasks[at],tasks[next]]=[tasks[next],tasks[at]];save();render();$('items').children[next].querySelector('.drag-handle').focus()}}});
     if(t.done)li.className='done';
     const check=document.createElement('button');
     check.className='check';check.type='button';check.textContent=t.done?'✓':'';
@@ -45,7 +52,7 @@ function render(){
     const del=document.createElement('button');del.type='button';del.className='icon';del.textContent='×';
     del.setAttribute('aria-label','Delete task');
     del.onclick=()=>{tasks=tasks.filter(x=>x.id!==t.id);save();render()};
-    li.append(check,wrap,edit,del);$('items').append(li);
+    li.append(handle,check,wrap,edit,del);$('items').append(li);
   });
   const left=tasks.filter(t=>!t.done).length;
   $('count').textContent=left+' task'+(left===1?'':'s')+' left';
@@ -53,9 +60,44 @@ function render(){
 }
 $('form').onsubmit=e=>{
   e.preventDefault();const v=$('entry').value.trim();if(!v)return;
-  tasks.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2),text:v,done:false,completedAt:null});
+  tasks.unshift({id:Date.now().toString(36)+Math.random().toString(36).slice(2),text:v,done:false,completedAt:null});
   $('entry').value='';save();render();$('entry').focus();
 };
 $('clear').onclick=()=>{tasks=tasks.filter(t=>!t.done);save();render()};
+let drag=null;
+function startDrag(e,li,handle){
+  if(e.button!==0||drag)return;
+  e.preventDefault();
+  drag={li,handle,pointerId:e.pointerId};
+  li.classList.add('dragging');
+  handle.setPointerCapture(e.pointerId);
+  handle.addEventListener('pointermove',moveDrag);
+  handle.addEventListener('pointerup',endDrag);
+  handle.addEventListener('pointercancel',endDrag);
+}
+function moveDrag(e){
+  if(!drag||e.pointerId!==drag.pointerId)return;
+  const list=$('items');
+  const target=document.elementFromPoint(e.clientX,e.clientY)?.closest('li');
+  if(target&&target!==drag.li&&target.parentElement===list){
+    const middle=target.getBoundingClientRect().top+target.offsetHeight/2;
+    list.insertBefore(drag.li,e.clientY<middle?target:target.nextSibling);
+  }
+  if(e.clientY<60)window.scrollBy(0,-12);
+  if(e.clientY>window.innerHeight-60)window.scrollBy(0,12);
+}
+function endDrag(e){
+  if(!drag||e.pointerId!==drag.pointerId)return;
+  const {li,handle}=drag;
+  handle.removeEventListener('pointermove',moveDrag);
+  handle.removeEventListener('pointerup',endDrag);
+  handle.removeEventListener('pointercancel',endDrag);
+  li.classList.remove('dragging');
+  drag=null;
+  const ids=[...$('items').children].map(el=>el.dataset.id);
+  const byId=new Map(tasks.map(t=>[t.id,t]));
+  tasks=ids.map(id=>byId.get(id)).filter(Boolean);
+  save();
+}
 render();
 </script></body></html>
