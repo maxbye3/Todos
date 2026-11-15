@@ -1,0 +1,17 @@
+{
+  "name": "Max's Todos",
+  "short_name": "Todos",
+  "start_url": "/Todos/",
+  "scope": "/Todos/",
+  "display": "standalone",
+  "background_color": "#f4f7f8",
+  "theme_color": "#2c3e50",
+  "icons": [
+    {
+      "src": "/Todos/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
