@@ -9,7 +9,7 @@ const CHRISTMAS_DEFAULTS=['Add Micky','Add Sammy','Add Talulah','Add Garrett','A
 let christmasTasks;
 try{christmasTasks=JSON.parse(localStorage.getItem(CHRISTMAS_KEY)||'null')}catch(e){}
 if(!Array.isArray(christmasTasks))christmasTasks=CHRISTMAS_DEFAULTS.map(text=>({text,done:false}));
-function saveChristmas(){try{localStorage.setItem(CHRISTMAS_KEY,JSON.stringify(christmasTasks))}catch(e){alert('Could not save Christmas tasks')}}
+function saveChristmas(){try{localStorage.setItem(CHRISTMAS_KEY,JSON.stringify(christmasTasks));window.todoCloudSave?.('gameChristmas',christmasTasks)}catch(e){alert('Could not save Christmas tasks')}}
 function renderChristmas(){
  const list=document.getElementById('christmas-items');list.replaceChildren();
  christmasTasks.forEach(t=>{
@@ -44,7 +44,7 @@ try {
   }
 }catch(e){}
 const $=id=>document.getElementById(id);
-function save(){try{localStorage.setItem(KEY,JSON.stringify(tasks))}catch(e){alert('Could not save tasks. Check browser storage settings.')}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(tasks));window.todoCloudSave?.('gameTasks',tasks)}catch(e){alert('Could not save tasks. Check browser storage settings.')}}
 function render(){
   $('items').replaceChildren();
   $('empty').hidden=tasks.length!==0;
@@ -126,4 +126,5 @@ function endDrag(e){
   save();render();
 }
 render();
-</script></body></html>
+window.todoCloudSections={gameTasks:{storageKey:KEY,apply:items=>{tasks=items;render()}},gameChristmas:{storageKey:CHRISTMAS_KEY,apply:items=>{christmasTasks=items;renderChristmas()}}};
+</script><script type="module" src="../firebase-sync.js"></script></body></html>
