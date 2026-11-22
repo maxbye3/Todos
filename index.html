@@ -10,7 +10,7 @@ let walmartTasks;
 try{walmartTasks=JSON.parse(localStorage.getItem(WALMART_KEY)||'null')}catch(e){}
 if(!Array.isArray(walmartTasks))walmartTasks=[];
 for(const text of WALMART_DEFAULTS){if(!walmartTasks.some(t=>t.text.toLowerCase()===text.toLowerCase()))walmartTasks.push({text,done:false})}
-function saveWalmart(){try{localStorage.setItem(WALMART_KEY,JSON.stringify(walmartTasks))}catch(e){alert('Could not save shopping list')}}
+function saveWalmart(){try{localStorage.setItem(WALMART_KEY,JSON.stringify(walmartTasks));window.todoCloudSave?.('walmart',walmartTasks)}catch(e){alert('Could not save shopping list')}}
 function renderWalmart(){const list=document.getElementById('walmart-items');list.replaceChildren();for(const t of walmartTasks){const li=document.createElement('li');if(t.done)li.className='done';const check=document.createElement('button');check.type='button';check.className='check';check.textContent=t.done?'✓':'';check.setAttribute('aria-label',t.done?'Mark incomplete':'Mark complete');check.onclick=()=>{t.done=!t.done;saveWalmart();renderWalmart()};const label=document.createElement('span');label.className='task';label.textContent=t.text;li.append(check,label);list.append(li)}}
 saveWalmart();renderWalmart();
 const CHRISTMAS_KEY='flatlist.christmas.tasks.v1';
@@ -19,7 +19,7 @@ let christmasTasks;
 try{christmasTasks=JSON.parse(localStorage.getItem(CHRISTMAS_KEY)||'null')}catch(e){}
 if(!Array.isArray(christmasTasks))christmasTasks=CHRISTMAS_DEFAULTS.map(text=>({text,done:false}));
 else {for(const text of ['Draw Marina gift','Paint Marina gift']){if(!christmasTasks.some(t=>t.text===text))christmasTasks.push({text,done:false})}try{localStorage.setItem(CHRISTMAS_KEY,JSON.stringify(christmasTasks))}catch(e){}}
-function saveChristmas(){try{localStorage.setItem(CHRISTMAS_KEY,JSON.stringify(christmasTasks))}catch(e){alert('Could not save Christmas tasks')}}
+function saveChristmas(){try{localStorage.setItem(CHRISTMAS_KEY,JSON.stringify(christmasTasks));window.todoCloudSave?.('christmas',christmasTasks)}catch(e){alert('Could not save Christmas tasks')}}
 function renderChristmas(){
  const list=document.getElementById('christmas-items');list.replaceChildren();
  christmasTasks.forEach(t=>{
@@ -54,7 +54,7 @@ try {
   }
 }catch(e){}
 const $=id=>document.getElementById(id);
-function save(){try{localStorage.setItem(KEY,JSON.stringify(tasks))}catch(e){alert('Could not save tasks. Check browser storage settings.')}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(tasks));window.todoCloudSave?.('tasks',tasks)}catch(e){alert('Could not save tasks. Check browser storage settings.')}}
 function archiveCompleted(){
  let changed=false;const now=Date.now();
  for(const t of tasks){if(t.done&&t.section!=='archive'&&t.completedAt&&Number.isFinite(Date.parse(t.completedAt))&&now-Date.parse(t.completedAt)>=86400000){t.section='archive';changed=true}}
@@ -161,4 +161,5 @@ function endDrag(e){
 render();
 setInterval(render,60000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()});
-</script></body></html>
+window.todoCloudSections={tasks:{storageKey:KEY,apply:items=>{tasks=items;render()}},christmas:{storageKey:CHRISTMAS_KEY,apply:items=>{christmasTasks=items;renderChristmas()}},walmart:{storageKey:WALMART_KEY,apply:items=>{walmartTasks=items;renderWalmart()}}};
+</script><script type="module" src="firebase-sync.js"></script></body></html>
