@@ -57,6 +57,8 @@ try {
     localStorage.setItem(ORDER_MIGRATION_KEY,'yes');
   }
 }catch(e){}
+// Persist legacy timestamp backfill locally so the Firebase import includes it.
+try{if(localStorage.getItem(KEY))localStorage.setItem(KEY,JSON.stringify(tasks))}catch(e){}
 const $=id=>document.getElementById(id);
 function save(){try{localStorage.setItem(KEY,JSON.stringify(tasks));window.todoCloudSave?.('tasks',tasks)}catch(e){alert('Could not save tasks. Check browser storage settings.')}}
 function archiveCompleted(){
