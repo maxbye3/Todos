@@ -2,7 +2,10 @@ import {initializeApp} from 'https://www.gstatic.com/firebasejs/11.10.0/firebase
 import {getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut} from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js';
 import {getFirestore,doc,getDoc,setDoc,onSnapshot} from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js';
 const config={apiKey:'AIzaSyAYu4teVOnU2Hzg_ImPRGxMIiCu7gMOwQg',authDomain:'maxbye-b0852.firebaseapp.com',projectId:'maxbye-b0852',storageBucket:'maxbye-b0852.firebasestorage.app',messagingSenderId:'57012876259',appId:'1:57012876259:web:c028eede6f0ddaa015a6d6'};
-const app=initializeApp(config),auth=getAuth(app),db=getFirestore(app);
+// Only the standalone GitHub Pages app may offer owner editing.
+const writableSite=location.origin==='https://maxbye3.github.io'&&location.pathname.startsWith('/Todos/')&&window.self===window.top;
+const app=initializeApp(config),db=getFirestore(app);
+const auth=writableSite?getAuth(app):null;
 const owner='maxbye@gmail.com';
 const sections=window.todoCloudSections;
 const refs=Object.fromEntries(Object.keys(sections).map(k=>[k,doc(db,'sharedTodos',k)]));
@@ -13,20 +16,29 @@ const status=document.createElement('span');status.textContent='Connecting to sh
 const login=document.createElement('button');login.textContent='Owner sign in';login.type='button';
 const importBtn=document.createElement('button');importBtn.textContent='Import this device’s saved tasks';importBtn.type='button';importBtn.hidden=true;
 const logout=document.createElement('button');logout.textContent='Sign out';logout.type='button';logout.hidden=true;
-bar.append(status,login,importBtn,logout);
+bar.append(status);
+if(writableSite)bar.append(login,importBtn,logout);
+else{
+ const style=document.createElement('style');
+ style.textContent='form.add,.drag-handle,.icon,.christmas-edit,.clear{display:none!important}.check:disabled{cursor:default;pointer-events:none}';
+ document.head.append(style);
+ document.querySelectorAll('.empty').forEach(el=>{el.textContent='Nothing here yet.'});
+}
 document.querySelector('header').after(bar);
 const setStatus=t=>status.textContent=t;
-function updateControls(){login.hidden=allowed;logout.hidden=!allowed;importBtn.hidden=!allowed||!ready;document.querySelectorAll('input,form button,.check,.drag-handle,.icon,.christmas-edit').forEach(el=>{if(!el.closest('#cloud-bar'))el.disabled=!allowed||!ready});}
+function updateControls(){login.hidden=!writableSite||allowed;logout.hidden=!writableSite||!allowed;importBtn.hidden=!writableSite||!allowed||!ready;document.querySelectorAll('input,form button,.check,.drag-handle,.icon,.christmas-edit').forEach(el=>{if(!el.closest('#cloud-bar'))el.disabled=!allowed||!ready});}
 window.todoCloudSave=(section,value)=>{
- if(!allowed||!ready)return;
+ if(!writableSite||!allowed||!ready)return;
  setDoc(refs[section],{items:JSON.parse(JSON.stringify(value)),updatedAt:new Date().toISOString()}).catch(e=>setStatus('Sync failed: '+e.message));
 };
 document.addEventListener('click',e=>{if(allowed&&ready)return;if(e.target.closest('#cloud-bar'))return;if(e.target.closest('.check,.icon,.christmas-edit,.drag-handle')){e.preventDefault();e.stopImmediatePropagation()}},true);
 document.addEventListener('submit',e=>{if(!allowed||!ready){e.preventDefault();e.stopImmediatePropagation()}},true);
+for(const type of ['pointerdown','keydown'])document.addEventListener(type,e=>{if(!allowed||!ready){if(e.target.closest('.drag-handle,.check,.icon,.christmas-edit')){e.preventDefault();e.stopImmediatePropagation()}}},true);
+if(writableSite){
 login.onclick=()=>signInWithPopup(auth,new GoogleAuthProvider()).catch(e=>setStatus('Sign-in failed: '+e.message));
 logout.onclick=()=>signOut(auth);
 importBtn.onclick=async()=>{
- if(!allowed||!ready)return;
+ if(!writableSite||!allowed||!ready)return;
  if(!confirm('Replace shared cloud lists with the tasks saved in this browser? This overwrites the cloud copy for both pages.'))return;
  try{
    for(const [key,section] of Object.entries(sections)){
@@ -43,12 +55,17 @@ onAuthStateChanged(auth,user=>{
  else setStatus('Shared tasks — view only. Owner can sign in to edit.');
  updateControls();
 });
-let pending=Object.keys(sections).length;
+}else{
+ setStatus('Shared tasks — view only.');
+}
+let pending=new Set(Object.keys(sections));
 for(const [key,section] of Object.entries(sections)){
  onSnapshot(refs[key],snapshot=>{
    if(snapshot.exists()&&Array.isArray(snapshot.data().items))section.apply(snapshot.data().items);
    else if(!snapshot.exists())section.apply([]);
-   if(pending>0){pending--;if(pending===0){ready=true;loading=false;updateControls();if(!allowed)setStatus('Shared tasks — view only. Owner can sign in to edit.')}} 
+   pending.delete(key);
+   if(pending.size===0){ready=true;loading=false;if(!allowed)setStatus(writableSite?'Shared tasks — view only. Owner can sign in to edit.':'Shared tasks — view only.');}
+   updateControls();
  },e=>{setStatus('Firestore unavailable: '+e.message);ready=false;updateControls()});
 }
 updateControls();
